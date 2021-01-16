@@ -25,7 +25,16 @@ def process(request):
                 margin: 100px 300px;
                 font-size: 16px;
             }
-            input[type=text], select, textarea, input[type=password]  {
+            input[type=text], select, textarea, input[type=file], input[type=password], input[type=date], input[type=email], input[type=range], input[type=number] {
+                width: 100%;
+                padding: 12px 0 12px 0px;
+                border: 1px solid #ccc;
+                text-indent:12px;
+                border-radius: 4px;
+                resize: none;
+            }
+
+            textarea {
                 width: 100%;
                 padding: 12px 0 12px 0px;
                 border: 1px solid #ccc;
@@ -78,6 +87,15 @@ def process(request):
 
                     generate_radio_input(input_config)
 
+                elif input_config['Type'] == 'date':
+                    generate_date_input(input_config)
+
+                elif input_config['Type'] == 'number' or input_config['Type'] == 'range':
+                    generate_number_input(input_config)
+
+                elif input_config['Type'] == 'file':
+                    generate_file_input(input_config)
+
                 else:
                     generate_text_input(input_config)
             input_(_class='button', type='submit',
@@ -113,6 +131,38 @@ def generate_text_input(input):
         input_(
             type=input['Type'],
             maxlength=input['Size'] if 'Size' in input else '',)
+    return html
+
+
+def generate_file_input(input):
+    html = div()
+    with html:
+        label(input['Name'])
+        input_(
+            type=input['Type'])
+    return html
+
+
+def generate_date_input(input):
+    html = div()
+    with html:
+        label(input['Name'])
+        input_(
+            type=input['Type'],
+            max=input['Maximum'] if 'Maximum' in input else '',
+            min=input['Minimum'] if 'Minimum' in input else '')
+    return html
+
+
+def generate_number_input(input):
+    html = div()
+    with html:
+        label(input['Name'])
+        input_(
+            type=input['Type'],
+            max=input['Maximum'] if 'Maximum' in input else '',
+            min=input['Minimum'] if 'Minimum' in input else '',
+            step=input['Step'] if 'Step' in input else '')
     return html
 
 
